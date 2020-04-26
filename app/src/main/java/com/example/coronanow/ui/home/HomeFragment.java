@@ -22,9 +22,13 @@ import com.example.coronanow.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class HomeFragment extends Fragment {
 
-    private TextView tvTotalConfirmed, tvTotalDeath, tvTotalRecovered;
+    private TextView tvTotalConfirmed, tvTotalDeath, tvTotalRecovered, tvLastUpdated;
     private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -37,10 +41,21 @@ public class HomeFragment extends Fragment {
         tvTotalDeath=root.findViewById(R.id.tvTotalDeaths);
         tvTotalRecovered=root.findViewById(R.id.tvTotalRecovered);
         progressBar=root.findViewById(R.id.progress_circular_home);
+        tvLastUpdated=root.findViewById(R.id.tvLastUpdated);
 
         //Llama Volley
         getData();
         return root;
+    }
+    //METODO PARA LA FECHA
+    private String getDate(long millisecond){
+        // SABADO, 25 Marzo 2020 11:49:40 PM
+        SimpleDateFormat formatter= new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss aaa", new Locale("es", "ES"));
+        //
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millisecond);
+
+        return formatter.format(calendar.getTime());
     }
 
     private void getData() {
@@ -56,6 +71,7 @@ public class HomeFragment extends Fragment {
                     tvTotalConfirmed.setText(jsonObject.getString("cases"));
                     tvTotalDeath.setText(jsonObject.getString("deaths"));
                     tvTotalRecovered.setText(jsonObject.getString("recovered"));
+                    tvLastUpdated.setText("Última Actualización:"+"\n"+getDate(jsonObject.getLong("updated")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -70,4 +86,6 @@ public class HomeFragment extends Fragment {
         queue.add(stringRequest);
 
     }
+
+
 }

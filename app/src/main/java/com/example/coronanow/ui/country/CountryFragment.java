@@ -1,5 +1,7 @@
 package com.example.coronanow.ui.country;
 
+import android.content.Intent;
+import android.icu.text.Transliterator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +50,11 @@ public class CountryFragment extends Fragment {
         rvCovidCountry = root.findViewById(R.id.rvCovidCountry);
         progressBar = root.findViewById(R.id.progress_circular_country);
         rvCovidCountry.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //Llamar el divisor
+        DividerItemDecoration dividerItemDecoration= new DividerItemDecoration(rvCovidCountry.getContext(),DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getContext(),R.drawable.line_divider));
+        rvCovidCountry.addItemDecoration(dividerItemDecoration);
         //Llamar el método volley
         getDataFromServer();
         return root;
@@ -54,6 +63,18 @@ public class CountryFragment extends Fragment {
     private void showRecyclerView(){
          CovidCountryAdapter covidCountryAdapter= new CovidCountryAdapter(covidCountries);
          rvCovidCountry.setAdapter(covidCountryAdapter);
+         ItemClickSupport.addTo(rvCovidCountry).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+             @Override
+             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                 showSelectedCovidCountry(covidCountries.get(position));
+             }
+         });
+    }
+
+    private void showSelectedCovidCountry(CovidCountry covidCountry){
+        Intent covidCovidCountryDetail= new Intent(getActivity(),CovidCountryDetail.class);
+        covidCovidCountryDetail.putExtra("EXTRA_COVID",covidCountry);
+        startActivity(covidCovidCountryDetail);
     }
 
     private void getDataFromServer() {
@@ -69,7 +90,10 @@ public class CountryFragment extends Fragment {
                         JSONArray jsonArray = new JSONArray(response);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject data = jsonArray.getJSONObject(i);
-                            covidCountries.add(new CovidCountry(data.getString("country"), data.getString("cases")));
+                            covidCountries.add(new CovidCountry(data.getString("country"), data.getString("cases"),
+                                    data.getString("todayCases"),data.getString("deaths"),
+                                    data.getString("todayDeaths"),data.getString("recovered"),
+                                    data.getString("active"),data.getString("critical")));
                         } showRecyclerView();
                     } catch (JSONException e) {
                         e.printStackTrace();
