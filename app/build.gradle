@@ -38,6 +38,7 @@ dependencies {
     //Dependencias para añadir librerías volley y recycler view
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-
-
+    //Dependencias para añadir librería de Glide para gestionar las imágenes (bandera paises)
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

@@ -12,13 +12,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/imgCountryFlag"
+            android:layout_width="48dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            tools:src="@drawable/pe">
+
+        </ImageView>
         <TextView
             android:id="@+id/tvTotalCases"
             android:textColor="@color/colorTotalConfirmado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             style="@style/LabelFontStyle"
-            android:textSize="24sp"
+            android:textSize="20sp"
             tools:text="45793">
 
         </TextView>
@@ -29,9 +38,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/LabelFontStyle"
-            android:layout_marginLeft="16dp"
-            android:textSize="24sp"
-            tools:text="China">
+            android:layout_marginLeft="8dp"
+            android:textSize="20sp"
+            tools:text="Peru">
 
         </TextView>
     </LinearLayout>

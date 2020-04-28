@@ -5,6 +5,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        //Para repositorio glide de imágenes
+        mavenCentral()
         
     }
     dependencies {

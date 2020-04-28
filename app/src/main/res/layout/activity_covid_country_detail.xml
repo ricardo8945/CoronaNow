@@ -9,6 +9,7 @@
     tools:context=".ui.country.CovidCountryDetail">
     
     <LinearLayout
+        android:layout_margin="16dp"
         android:id="@+id/linearLayoutCountryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,6 +18,7 @@
             android:id="@+id/tvDetailCountryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textColor="#fff"
             tools:text="China"
             style="@style/TotalFontStyle"/>
