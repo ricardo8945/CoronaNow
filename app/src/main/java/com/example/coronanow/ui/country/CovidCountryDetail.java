@@ -32,7 +32,7 @@ public class CovidCountryDetail extends AppCompatActivity {
         CovidCountry covidCountry= getIntent().getParcelableExtra("EXTRA_COVID");
 
         tvDetailCountryName.setText(covidCountry.getmCovidCountry());
-        tvDetailTotalCases.setText(covidCountry.getmCases());
+        tvDetailTotalCases.setText(Integer.toString(covidCountry.getmCases()));
         tvDetailTodayCases.setText(covidCountry.getmTodayCases());
         tvDetailTotalDeaths.setText(covidCountry.getmDeaths());
         tvDetailTodayDeaths.setText(covidCountry.getmTodayDeaths());

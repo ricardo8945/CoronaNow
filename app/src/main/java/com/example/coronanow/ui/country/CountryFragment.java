@@ -1,7 +1,6 @@
 package com.example.coronanow.ui.country;
 
 import android.content.Intent;
-import android.icu.text.Transliterator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,14 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,8 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 public class CountryFragment extends Fragment {
 
@@ -68,7 +66,7 @@ public class CountryFragment extends Fragment {
         //Llamar al covid country adapter
         covidCountries=new ArrayList<>();
         //Llamar el método volley
-        getDataFromServer();
+        getDataFromServerSortTotalCases();
         return root;
     }
 
@@ -89,7 +87,7 @@ public class CountryFragment extends Fragment {
         startActivity(covidCovidCountryDetail);
     }
 
-    private void getDataFromServer() {
+    private void getDataFromServerSortTotalCases() {
         String url="https://corona.lmao.ninja/v2/countries";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -104,12 +102,23 @@ public class CountryFragment extends Fragment {
                             JSONObject data = jsonArray.getJSONObject(i);
                             //Json para flags para extraer Jsonobject dentro del JsonObject
                             JSONObject countryInfo=data.getJSONObject("countryInfo");
-                            covidCountries.add(new CovidCountry(data.getString("country"), data.getString("cases"),
+                            covidCountries.add(new CovidCountry(data.getString("country"), data.getInt("cases"),
                                     data.getString("todayCases"),data.getString("deaths"),
                                     data.getString("todayDeaths"),data.getString("recovered"),
                                     data.getString("active"),data.getString("critical"),
                                     countryInfo.getString("flag")));
                         }
+                        //Ordenamiento descendiente
+                        Collections.sort(covidCountries, new Comparator<CovidCountry>() {
+                            @Override
+                            public int compare(CovidCountry obj1, CovidCountry obj2) {
+                                if (obj1.getmCases() > obj2.getmCases()) {
+                                    return -1;
+                                } else {
+                                    return 1;
+                                }
+                            }
+                        });
                         //ActionBar Title
                         getActivity().setTitle(jsonArray.length()+" países afectados");
                         showRecyclerView();
@@ -127,7 +136,47 @@ public class CountryFragment extends Fragment {
                     }
                 });
         Volley.newRequestQueue(getActivity()).add(stringRequest);
-        }
+    }
+    private void getDataFromServerSortAlphabet() {
+        String url="https://corona.lmao.ninja/v2/countries";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.GONE);
+                if (response != null) {
+                    Log.e(TAG, "onResponse" + response);
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            //Json para flags para extraer Jsonobject dentro del JsonObject
+                            JSONObject countryInfo=data.getJSONObject("countryInfo");
+                            covidCountries.add(new CovidCountry(data.getString("country"), data.getInt("cases"),
+                                    data.getString("todayCases"),data.getString("deaths"),
+                                    data.getString("todayDeaths"),data.getString("recovered"),
+                                    data.getString("active"),data.getString("critical"),
+                                    countryInfo.getString("flag")));
+                        }
+
+                        //ActionBar Title
+                        getActivity().setTitle(jsonArray.length()+" países afectados");
+                        showRecyclerView();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e(TAG,"onResponse"+error);
+                    }
+                });
+        Volley.newRequestQueue(getActivity()).add(stringRequest);
+    }
         /*
         private String getSpanish(String countryenglish){
             String countrySpanish="";
@@ -145,7 +194,7 @@ public class CountryFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu,menu);
+        inflater.inflate(R.menu.country_menu,menu);
         MenuItem searchItem=menu.findItem(R.id.action_search);
         SearchView searchView = new SearchView(getActivity());
         searchView.setQueryHint("Buscando..");
@@ -166,5 +215,24 @@ public class CountryFragment extends Fragment {
         });
         searchItem.setActionView(searchView);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_sort_alpha:
+                Toast.makeText(getContext(),"Ordenado alfabéticamente", Toast.LENGTH_SHORT).show();
+                covidCountries.clear();
+                progressBar.setVisibility(View.VISIBLE);
+                getDataFromServerSortAlphabet();
+                return true;
+            case R.id.action_sort_by_cases:
+                Toast.makeText(getContext(),"Ordenado por casos", Toast.LENGTH_SHORT).show();
+                covidCountries.clear();
+                progressBar.setVisibility(View.VISIBLE);
+                getDataFromServerSortTotalCases();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
