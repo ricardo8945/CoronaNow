@@ -114,6 +114,7 @@ public class CountryFragment extends Fragment {
                 });
         Volley.newRequestQueue(getActivity()).add(stringRequest);
         }
+        /*
         private String getSpanish(String countryenglish){
             String countrySpanish="";
             Locale outLocale = Locale.forLanguageTag("es_ES");
@@ -126,5 +127,5 @@ public class CountryFragment extends Fragment {
                 }
             }
             return countrySpanish;
-        }
+        }*/
 }

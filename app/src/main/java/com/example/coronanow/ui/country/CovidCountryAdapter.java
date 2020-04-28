@@ -57,7 +57,7 @@ public class CovidCountryAdapter extends RecyclerView.Adapter<CovidCountryAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTotalCases,tvCountryName;
-        ImageView imgCountryFlag;
+        ImageView imgCountryFlag,imgCountryFlagDetail;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTotalCases= itemView.findViewById(R.id.tvTotalCases);
