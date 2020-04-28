@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class CountryFragment extends Fragment {
 
@@ -109,5 +110,18 @@ public class CountryFragment extends Fragment {
                     }
                 });
         Volley.newRequestQueue(getActivity()).add(stringRequest);
+        }
+        private String getSpanish(String countryenglish){
+            String countrySpanish="";
+            Locale outLocale = Locale.forLanguageTag("es_ES");
+            Locale inLocale = Locale.forLanguageTag("en_GB");
+            //new Locale("es", "ES")
+            for (Locale l : Locale.getAvailableLocales()) {
+                if (l.getDisplayCountry(inLocale).equals(countryenglish)) {
+                    countrySpanish=l.getDisplayCountry(outLocale);
+                    break;
+                }
+            }
+            return countrySpanish;
         }
 }
