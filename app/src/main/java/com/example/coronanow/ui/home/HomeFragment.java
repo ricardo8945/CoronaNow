@@ -43,6 +43,10 @@ public class HomeFragment extends Fragment {
         progressBar=root.findViewById(R.id.progress_circular_home);
         tvLastUpdated=root.findViewById(R.id.tvLastUpdated);
 
+        //Llamar Action Bar Title
+        getActivity().setTitle("Resumen");
+
+
         //Llama Volley
         getData();
         return root;
