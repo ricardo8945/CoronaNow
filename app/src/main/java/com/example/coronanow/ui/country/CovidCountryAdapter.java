@@ -18,6 +18,7 @@ import com.example.coronanow.R;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,13 @@ public class CovidCountryAdapter extends RecyclerView.Adapter<CovidCountryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull CovidCountryAdapter.ViewHolder holder, int position) {
+        //FORMATO DECIMAL
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+
         CovidCountry covidCountry= covidCountries.get(position);
-        holder.tvTotalCases.setText(Integer.toString(covidCountry.getmCases()));
+        String casos = formatter.format(covidCountry.getmCases());
+        holder.tvTotalCases.setText(casos);
+        //holder.tvTotalCases.setText(Integer.toString(covidCountry.getmCases()));
         holder.tvCountryName.setText(covidCountry.getmCovidCountry());
 
         //Glide methods

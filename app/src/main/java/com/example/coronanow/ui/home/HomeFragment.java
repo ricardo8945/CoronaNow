@@ -22,6 +22,7 @@ import com.example.coronanow.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -69,12 +70,25 @@ public class HomeFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                DecimalFormat formatter = new DecimalFormat("#,###,###");
+                Integer mcasos,mmuertes, mrecuperados;
+                String casos,muertes, recuperados;
                 progressBar.setVisibility(View.GONE);
                 try {
                     JSONObject jsonObject = new JSONObject(response.toString());
-                    tvTotalConfirmed.setText(jsonObject.getString("cases"));
-                    tvTotalDeath.setText(jsonObject.getString("deaths"));
-                    tvTotalRecovered.setText(jsonObject.getString("recovered"));
+                    //Se transforma el string obtenido del Json, se pasa a Integer para formatear y pasar String
+                    mcasos=Integer.valueOf(jsonObject.getString("cases"));
+                    mmuertes=Integer.valueOf(jsonObject.getString("deaths"));
+                    mrecuperados=Integer.valueOf(jsonObject.getString("recovered"));
+                    casos= formatter.format(mcasos);
+                    muertes=formatter.format(mmuertes);
+                    recuperados=formatter.format(mrecuperados);
+                    tvTotalConfirmed.setText(casos);
+                    tvTotalDeath.setText(muertes);
+                    tvTotalRecovered.setText(recuperados);
+                    //tvTotalConfirmed.setText(jsonObject.getString("cases"));
+                    //tvTotalDeath.setText(jsonObject.getString("deaths"));
+                    //tvTotalRecovered.setText(jsonObject.getString("recovered"));
                     tvLastUpdated.setText("Última Actualización:"+"\n"+getDate(jsonObject.getLong("updated")));
                 } catch (JSONException e) {
                     e.printStackTrace();

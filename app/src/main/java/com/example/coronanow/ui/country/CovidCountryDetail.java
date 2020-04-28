@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.coronanow.R;
 
+import java.text.DecimalFormat;
+
 public class CovidCountryDetail extends AppCompatActivity {
     TextView tvDetailCountryName, tvDetailTotalCases, tvDetailTodayCases, tvDetailTotalDeaths, tvDetailTodayDeaths,
             tvDetailTotalRecovered, tvDetailTotalActive,tvDetailTotalCritical;
@@ -30,9 +32,11 @@ public class CovidCountryDetail extends AppCompatActivity {
         imageCountryFlagDetail= (ImageView) findViewById(R.id.imgCountryFlagDetail);
         // Llama al fragment CovidCountry
         CovidCountry covidCountry= getIntent().getParcelableExtra("EXTRA_COVID");
-
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        String casos =formatter.format(covidCountry.getmCases());
         tvDetailCountryName.setText(covidCountry.getmCovidCountry());
-        tvDetailTotalCases.setText(Integer.toString(covidCountry.getmCases()));
+        //tvDetailTotalCases.setText(Integer.toString(covidCountry.getmCases()));
+        tvDetailTotalCases.setText(casos);
         tvDetailTodayCases.setText(covidCountry.getmTodayCases());
         tvDetailTotalDeaths.setText(covidCountry.getmDeaths());
         tvDetailTodayDeaths.setText(covidCountry.getmTodayDeaths());

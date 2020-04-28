@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -105,8 +106,8 @@ public class CountryFragment extends Fragment {
                             covidCountries.add(new CovidCountry(data.getString("country"), data.getInt("cases"),
                                     data.getString("todayCases"),data.getString("deaths"),
                                     data.getString("todayDeaths"),data.getString("recovered"),
-                                    data.getString("active"),data.getString("critical"),
-                                    countryInfo.getString("flag")));
+                                    data.getString("active"),data.getString("critical"),countryInfo.getString("flag")
+                                    ));
                         }
                         //Ordenamiento descendiente
                         Collections.sort(covidCountries, new Comparator<CovidCountry>() {
