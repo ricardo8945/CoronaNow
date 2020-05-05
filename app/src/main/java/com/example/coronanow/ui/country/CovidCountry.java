@@ -41,7 +41,7 @@ public class CovidCountry implements Parcelable {
     }
 
     public String getmTodayDeaths() {
-        Integer mtd=Integer.valueOf(mTodayCases);
+        Integer mtd=Integer.valueOf(mTodayDeaths);
         String MTodayDeaths= formatter.format(mtd);
         return MTodayDeaths;
     }
